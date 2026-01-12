@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>중학교 과학 OX 퀴즈</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+        #quiz {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: auto;
+        }
+        .question {
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+        .button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .correct {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .wrong {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<div id="quiz">
+    <h1>중학교 과학 OX 퀴즈</h1>
+    <div class="question" id="question"></div>
+    <button class="button" onclick="answer('O')">O</button>
+    <button class="button" onclick="answer('X')">X</button>
+    <div id="result" style="margin-top: 20px;"></div>
+    <button class="button" id="next" onclick="nextQuestion()" style="display:none;">다음 문제</button>
+</div>
+
+<script>
+    const questions = [
+        { question: "물은 H2O로 이루어져 있다.", answer: "O" },
+        { question: "식물은 광합성을 통해 에너지를 얻는다.", answer: "O" },
+        { question: "지구는 태양의 주위를 돌지 않는다.", answer: "X" },
+        { question: "모든 물체는 중력을 가지고 있다.", answer: "O" },
+        { question: "대기 중 산소는 50% 이상을 차지한다.", answer: "X" }
+    ];
+
+    let currentQuestionIndex = 0;
+
+    function loadQuestion() {
+        const questionElement = document.getElementById('question');
+        questionElement.innerText = questions[currentQuestionIndex].question;
+        document.getElementById('result').innerText = '';
+        document.getElementById('next').style.display = 'none';
+    }
+
+    function answer(selected) {
+        const correctAnswer = questions[currentQuestionIndex].answer;
+        const resultElement = document.getElementById('result');
+
+        if (selected === correctAnswer) {
+            resultElement.innerText = "정답입니다!";
+            resultElement.className = "correct";
+        } else {
+            resultElement.innerText = "틀렸습니다.";
+            resultElement.className = "wrong";
+        }
+
+        document.getElementById('next').style.display = 'inline';
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            loadQuestion();
+        } else {
+            document.getElementById('quiz').innerHTML = "<h2>퀴즈가 끝났습니다!</h2>";
+        }
+    }
+
+    loadQuestion();
+</script>
+
+</body>
+</html>
