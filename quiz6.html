@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>과학실 탈출 미션</title>
+
+<style>
+  :root { --primary-color: #4a90e2; --accent-color: #e74c3c; }
+  html, body { margin: 0; width: 100%; height: 100%; font-family: 'Pretendard', sans-serif; overflow: hidden; background: #000; }
+  .scene { position: relative; width: 100%; height: 100%; display: none; background-size: cover; background-position: center; }
+  .scene.active { display: flex; justify-content: center; align-items: center; }
+  .click-area { position: absolute; cursor: pointer; background: rgba(255, 255, 255, 0); transition: background 0.3s; }
+  .click-area:hover { background: rgba(255, 255, 255, 0.1); }
+  .popup { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: none; z-index: 100; width: 320px; text-align: center; }
+  button { margin-top: 15px; width: 100%; padding: 10px; border: none; border-radius: 5px; background: var(--primary-color); color: white; font-weight: bold; cursor: pointer; }
+  .key { position: absolute; left: 48%; top: 58%; font-size: 50px; cursor: pointer; display: none; animation: bounce 2s infinite; }
+  @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  .password-icon { position: fixed; right: 30px; bottom: 30px; font-size: 30px; background: white; border-radius: 50%; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+  .next-text { font-size: 24px; color: white; text-align: center; }
+</style>
+</head>
+<body>
+
+<audio id="doorSound">
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_5c8d4f2b8c.mp3" type="audio/mpeg">
+</audio>
+
+<div class="scene active" id="classroom" style="background-image:url('https://jadooooooo-00.github.io/school3/science.jpg')">
+  <div class="click-area" style="left:7%; top:6%; width:13%; height:18%;" onclick="openPopup('hintPopup')"></div>
+  <div class="click-area" style="left:42%; top:64%; width:20%; height:16%;" onclick="openPopup('passwordPopup')"></div>
+  <div class="key" id="key" onclick="goNextScene()">🔑</div>
+</div>
+
+<div class="scene" id="hallway">
+  <div class="next-text">🚪 학교 비밀 계단으로 이동 중입니다...</div>
+</div>
+
+<div class="password-icon" id="passwordIcon" onclick="openPopup('passwordPopup')">🔒</div>
+
+<div class="popup" id="introPopup" style="display:block;">
+  <p><b>과학실로 들어왔다.</b><br>교탁 서랍이 잠겨 있다.<br>여기에 무언가가 있을 것 같은데…<br>
+  <span style="color:var(--accent-color);"><b>비밀번호가 뭐지?</b></span></p>
+  <button onclick="closePopup('introPopup')">시작하기</button>
+</div>
+
+<div class="popup" id="hintPopup">
+  <p>🕒 <b>힌트</b><br>지금 14시 25분이야.</p>
+  <button onclick="closePopup('hintPopup')">닫기</button>
+</div>
+
+<div class="popup" id="passwordPopup">
+  <p>서랍 비밀번호 네자리는?</p>
+  <input type="number" id="pw" placeholder="0000" style="width:80%; font-size:24px; text-align:center; padding:5px;">
+  <button onclick="checkPassword()">확인</button>
+</div>
+
+<div class="popup" id="quizPopup">
+  <p><b>🌱 광합성 퀴즈</b><br>광합성에 필요한 것이 <b>아닌 것</b>은?</p>
+  <div style="text-align:left; margin-left: 20%;">
+    <label><input type="radio" name="quiz" value="1"> 물</label><br>
+    <label><input type="radio" name="quiz" value="2"> 이산화탄소</label><br>
+    <label><input type="radio" name="quiz" value="3"> 빛</label><br>
+    <label><input type="radio" name="quiz" value="4"> 산소</label>
+  </div>
+  <button onclick="checkQuiz()">정답 확인</button>
+</div>
+
+<script>
+  function openPopup(id) { document.getElementById(id).style.display = "block"; }
+  function closePopup(id) { document.getElementById(id).style.display = "none"; }
+
+  function checkPassword() {
+    if (document.getElementById("pw").value === "1425") {
+      closePopup("passwordPopup");
+      openPopup("quizPopup");
+    } else { alert("비밀번호가 틀렸습니다."); }
+  }
+
+  function checkQuiz() {
+    const selected = document.querySelector('input[name="quiz"]:checked');
+    if (selected && selected.value === "4") {
+      closePopup("quizPopup");
+      document.getElementById("passwordIcon").style.display = "none";
+      document.getElementById("key").style.display = "block";
+      alert("서랍이 열렸습니다! 열쇠를 획득하세요.");
+    } else { alert("정답을 선택하세요."); }
+  }
+
+  function goNextScene() {
+    document.getElementById("doorSound").play();
+    document.getElementById("key").style.display = "none";
+    document.getElementById("classroom").classList.remove("active");
+    document.getElementById("hallway").classList.add("active");
+    
+    // 1.5초 후 이동
+    setTimeout(() => {
+      window.location.href = "https://aiedu079-arch.github.io/escape/";
+    }, 1500);
+  }
+</script>
+
+</body>
+</html>
